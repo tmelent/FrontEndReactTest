@@ -1,15 +1,15 @@
-import React from 'react';
-import '../App.css';
-import PersonTable from './PersonTable';
+import React from 'react'
+import '../App.css'
+import DataSelectionMenu from './DataSelectionMenu'
 
-function App(): JSX.Element {
+const App = ():JSX.Element => {  
   return (
     <div className="App">
-      <header className="App-header">        
-        <PersonTable />
+      <header className="App-header">
+        <DataSelectionMenu />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

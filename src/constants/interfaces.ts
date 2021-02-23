@@ -1,20 +1,22 @@
-import { fetchPersonData } from "../actions/personTableActions";
-import { ADD_PERSON, FETCH_PERSON_DATA_FAIL, FETCH_PERSON_DATA_SUCCESS, REQUEST_PERSON_DATA } from "./actionTypes";
+import { ADD_PERSON, FETCH_PERSON_DATA_FAIL, FETCH_PERSON_DATA_SUCCESS, REQUEST_PERSON_DATA, SORT_TABLE_START, SORT_TABLE_SUCCESS } from "./actionTypes";
+
+// Основные типы, используемые в проекте
 
 // Общее состояние приложения. 
 export interface State {
-    personState: PersonState
+    personReducer: PersonState
 }
 
 // Состояние данных таблицы.
 export interface PersonState {
     isFetching: boolean,
+    isLoading?: boolean,
     persons: PersonInfo[]
 }
 
 // Описание данных, полученных с сервера
 export interface PersonInfo {
-    id: string,
+    id: number,
     firstName: string,
     lastName: string,
     email: string,
@@ -37,8 +39,8 @@ export interface AddPersonAction {
 
 // Запущен процесс получения данных с сервера
 export interface RequestPersonData {
-    type: typeof REQUEST_PERSON_DATA    
-    
+    type: typeof REQUEST_PERSON_DATA
+
 }
 
 // Данные с сервера успешно получены
@@ -53,6 +55,20 @@ export interface FetchPersonDataFail {
     payload: string
 }
 
+// Начата сортировка таблицы
+export interface SortTableStart {
+    type: typeof SORT_TABLE_START,
+    payload: boolean
+}
+
+// Сортировка прошла успешно
+export interface SortTableSuccess {
+    type: typeof SORT_TABLE_SUCCESS,
+    payload: { isLoading: boolean, persons: PersonInfo[] }
+}
+
+
 
 // Общий тип для операций с данными таблицы
-export type PersonActionTypes = AddPersonAction | FetchPersonDataSuccess | RequestPersonData | FetchPersonDataFail 
+export type PersonActionTypes = AddPersonAction | FetchPersonDataSuccess | RequestPersonData | FetchPersonDataFail | SortTableStart | SortTableSuccess
+
