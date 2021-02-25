@@ -1,46 +1,34 @@
-# Getting Started with Create React App
+# Тестовое задание на вакансию Junior Front-End разработчик.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Стек технологий, используемые пакеты:
+1. React (в связке с redux, redux-thunk, react-router-dom, react-icons).
+2. TypeScript + ESLint.
+3. redux-devtools для отладки.
 
-## Available Scripts
+## Структура проекта.
+Так как проект построен на связке React + Redux, я решил структурировать проект следующим образом:
+/src/actions - Action Creator'ы.
+/src/components - простые компоненты React, которым не нужно знать о функциях и хранилище redux.
+/src/containers - "умные" компоненты, которые используют redux.
+/src/constants/ActionTypes.ts - константы action'ов.
+/src/constants/interfaces.ts - все необходимые типы данных, используемые с TypeScript, а также и сами action'ы. 
+/src/constants/reducers - redux reducer'ы, а также rootReducer, который объединяет их с помощью combineReducers.
+/src/store - хранилище redux.
+/src/styles - CSS стили.
 
-In the project directory, you can run:
+## Описание контейнеров ("умных" компонентов)
+В проекте есть несколько контейнеров:
+1. DataSelectionMenu.tsx
+В этом контейнере содержатся две кнопки-ссылки, позволяющие сделать выбор между необходимым набором данных, который нужно загрузить в таблицу.
+При нажатии первой кнопки вызывается метод редюсера `personReducer` `fetchPersonData` с параметром `1` или `2`, где `1` - малый набор данных, а `2` - большой набор данных. Данные помещаются в хранилище redux. 
+Так как серверная сортировка, фильтрация и прочее не возможны в данной ситуации, приходится прибегать к сортировке на фронте. 
+Далее с помощью `react-router-dom` происходит переход к следующему контейнеру.
 
-### `yarn start`
+2. DataTable.tsx 
+В этом контейнере непосредственно происходит рендеринг таблицы с нужным набором данных. Стандартная JavaScript функция `map` позволяет хорошо распределить данные по колонкам таблицы. 
+В шапке таблицы располагаются кликабельные зоны, к которым привязано событие `onClick`, при котором вызываются две функции: `sortTable` и `toggleOrder`. Первая нужна для непосредственной сортировки массива. Так как возвращение к несортированному виду данных не предусматривается приложением, достаточно работать с одним массивом в redux, делая всего один первоначальный запрос к серверу.
+Вторая функция это, своего рода, индикатор для уведомления метода сортировки о том, какой порядок необхоимо применить в конкретном случае. Если передать в `sortTable` параметр `false`, то таблица будет просто инвертирована, т.к. подразумевается, что параметр `false` может быть только в том случае, если последней сортировкой была сортировка по возрастанию данного столбца. Параметр `true` укажет на то, что нужно применить к данным сортировку по возрастанию. Иконки `font-awesome` из `react-icons` показывают текущее направление сортировки.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. AddPersonForm.tsx
+Этот контейнер представляет собой форму для добавления новой строки в массив. Так как про поле адреса ничего в задании сказано не было, адрес всегда один и тот же (шаблонный, один из тех, что есть в перечне). 
+Валидация происходит с помощью регулярных выражений и функции `String.match()`.
